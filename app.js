@@ -1,28 +1,25 @@
 console.log("starting app");
 const fs = require("fs");
-const os = require("os");
-const notes = require("./notes.js");
 const _ = require("lodash"); //set of handy utilities
+const yargs = require("yargs");
 
-var user = os.userInfo();
+const notes = require("./notes.js");
 
-var res = notes.addNote();
-var sumRes = notes.add(3, -9);
-console.log(res);
-console.log(sumRes);
-// fs.appendFile(
-//   "greetings.txt",
-//   `Hello ${user.username}! ` + `you are ${notes.age}`,
-//   err => {
-//     if (err) {
-//       console.log("ugh");
-//     } else {
-//       console.log("wee");
-//     }
-//   }
-// );
+const argv = yargs.argv;
+//var command = process.argv[2]; //this grabs 3rd elem in command line but better way is to use yargs
+var command = argv._[0]; //this grabs first elem in the yargs array
 
-// fs.appendFile(
-//   "greetings.txt",
-//   `Hello ${user.username}! ` + `you are ${notes.age}`
-// );
+console.log("command: ", command);
+console.log("Yargs", argv);
+
+if (command == "add") {
+  notes.addNote(argv.title, argv.body);
+} else if (command == "list") {
+  notes.getAll();
+} else if (command == "read") {
+  notes.getNote(argv.title);
+} else if (command == "remove") {
+  notes.removeNote(argv.title);
+} else {
+  console.log("command not recognized");
+}
